@@ -42,7 +42,7 @@ class SanitizeRedirectTest(unittest.TestCase):
     def test_multiple_hosts(self):
         allowed_hosts = ['myapp1.com', 'myapp2.com']
         for host in allowed_hosts:
-            url = 'http://{}/path/'.format(host)
+            url = f'http://{host}/path/'
             self.assertEqual(sanitize_redirect(allowed_hosts, url), url)
 
     def test_multiple_hosts_wrong_host(self):
@@ -122,8 +122,10 @@ class BuildAbsoluteURITest(unittest.TestCase):
                          'https://barfoo.com')
 
     def test_host_ends_with_slash_and_path_starts_with_slash(self):
-        self.assertEqual(build_absolute_uri(self.host + '/', '/foo/bar'),
-                         'http://foobar.com/foo/bar')
+        self.assertEqual(
+            build_absolute_uri(f'{self.host}/', '/foo/bar'),
+            'http://foobar.com/foo/bar',
+        )
 
     def test_absolute_uri(self):
         self.assertEqual(build_absolute_uri(self.host, '/foo/bar'),

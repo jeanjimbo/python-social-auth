@@ -20,8 +20,10 @@ class BaseOAuthTest(BaseBackendTest):
     expected_username = ''
 
     def extra_settings(self):
-        return {'SOCIAL_AUTH_' + self.name + '_KEY': 'a-key',
-                'SOCIAL_AUTH_' + self.name + '_SECRET': 'a-secret-key'}
+        return {
+            f'SOCIAL_AUTH_{self.name}_KEY': 'a-key',
+            f'SOCIAL_AUTH_{self.name}_SECRET': 'a-secret-key',
+        }
 
     def _method(self, method):
         return {'GET': HTTPretty.GET,

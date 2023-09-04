@@ -25,13 +25,12 @@ class IntegrityErrorUserSocialAuth(TestUserSocialAuth):
         if not hasattr(cls, '_called_times'):
             cls._called_times = 0
         cls._called_times += 1
-        if cls._called_times == 2:
-            user = list(User.cache.values())[0]
-            return IntegrityErrorUserSocialAuth(user, provider, uid)
-        else:
+        if cls._called_times != 2:
             return super(IntegrityErrorUserSocialAuth, cls).get_social_auth(
                 provider, uid
             )
+        user = list(User.cache.values())[0]
+        return IntegrityErrorUserSocialAuth(user, provider, uid)
 
 
 class IntegrityErrorStorage(TestStorage):
