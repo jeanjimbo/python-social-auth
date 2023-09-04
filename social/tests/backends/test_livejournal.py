@@ -54,7 +54,7 @@ class LiveJournalOpenIdTest(OpenIdTest):
     ])
 
     def openid_url(self):
-        return super(LiveJournalOpenIdTest, self).openid_url() + '/data/yadis'
+        return f'{super(LiveJournalOpenIdTest, self).openid_url()}/data/yadis'
 
     def post_start(self):
         self.strategy.remove_from_request_data('openid_lj_user')

@@ -154,17 +154,15 @@ class OpenIdConnectTestMixin(object):
         Return the id_token to be added to the access token body.
         """
 
-        id_token = {
+        return {
             'iss': issuer,
             'nonce': nonce,
             'aud': client_key,
             'azp': client_key,
             'exp': expiration_datetime,
             'iat': issue_datetime,
-            'sub': '1234'
+            'sub': '1234',
         }
-
-        return id_token
 
     def prepare_access_token_body(self, client_key=None, client_secret=None,
                                   expiration_datetime=None,
@@ -181,12 +179,11 @@ class OpenIdConnectTestMixin(object):
                                       should be considered invalid.
         """
 
-        body = {'access_token': 'foobar', 'token_type': 'bearer'}
         client_key = client_key or self.client_key
         client_secret = client_secret or self.client_secret
         now = datetime.datetime.utcnow()
         expiration_datetime = expiration_datetime or \
-                              (now + datetime.timedelta(seconds=30))
+                                  (now + datetime.timedelta(seconds=30))
         issue_datetime = issue_datetime or now
         nonce = nonce or 'a-nonce'
         issuer = issuer or self.issuer
@@ -194,8 +191,13 @@ class OpenIdConnectTestMixin(object):
             client_key, timegm(expiration_datetime.utctimetuple()),
             timegm(issue_datetime.utctimetuple()), nonce, issuer)
 
-        body['id_token'] = jwt.encode(id_token, client_secret,
-                                      algorithm='HS256').decode('utf-8')
+        body = {
+            'access_token': 'foobar',
+            'token_type': 'bearer',
+            'id_token': jwt.encode(
+                id_token, client_secret, algorithm='HS256'
+            ).decode('utf-8'),
+        }
         return json.dumps(body)
 
     def authtoken_raised(self, expected_message_regexp, **access_token_kwargs):
